@@ -29,23 +29,23 @@ public class Huffman {
     private node root;
 
     // Inner class
-    private class node{
+    private class node {
         int uid, weight;
         char ch;
         node left, right;
 
         // Constructor for class node
-        private node(Character ch, Integer weight, node left, node right){
+        private node(Character ch, Integer weight, node left, node right) {
             uid = ++counter;
             this.weight = weight;
             this.ch = ch;
             this.left = left;
             this.right = right;
-        }	
+        }
     }
 
     // Constructor for class Huffman
-    public Huffman(String orgStr, boolean show, String dotfilename){
+    public Huffman(String orgStr, boolean show, String dotfilename) {
         this.counter = 0;
         this.treeSize = 0;
         this.orgStr = orgStr;
@@ -69,13 +69,13 @@ public class Huffman {
         buildCodeTable();  // STEP 4: Build Huffman Code Table
     }
 
-    private void buildCodeTable(){
+    private void buildCodeTable() {
         String code = "";
         node n = root;
         buildCodeRecursion(n, code);  // Recursion
     }
 
-    private void buildCodeRecursion(node n, String code){
+    private void buildCodeRecursion(node n, String code) {
         if (n != null){
             if (! isLeaf(n)){  // n = internal node
                 buildCodeRecursion(n.left, code + '0');
@@ -88,10 +88,10 @@ public class Huffman {
         }
     }
 
-    private void writeDot(String fname){
+    private void writeDot(String fname) {
         if (treeSize > 1){
             node n = root;
-            try (PrintWriter o = new PrintWriter(new BufferedWriter (new FileWriter(fname)))){
+            try (PrintWriter o = new PrintWriter(new BufferedWriter (new FileWriter(fname)))) {
                 o.println("## Command to generate pdf:  dot -Tpdf test.dot -o test.pdf");
                 o.println("digraph g {");
                 dotWriteRecursion(n, o);  // Recursion
@@ -103,7 +103,7 @@ public class Huffman {
         }
     }
 
-    private void dotWriteRecursion(node n, PrintWriter o){
+    private void dotWriteRecursion(node n, PrintWriter o) {
         if (! isLeaf(n)){
             if (n.left != null){  // has left kid
                 String t = "";
@@ -136,7 +136,7 @@ public class Huffman {
         }
     }
 
-    private void buildTree(){
+    private void buildTree() {
         buildMinHeap();  // Set all leaf nodes into MinHeap
         node left, right;
         while (! pq.isEmpty()){
@@ -159,16 +159,16 @@ public class Huffman {
         }
     }
 
-    private void buildMinHeap(){
+    private void buildMinHeap() {
         for (Map.Entry<Character, Integer> entry: hmapWC.entrySet()){
-                Character ch = entry.getKey();
-        Integer weight = entry.getValue();
-        node n = new node(ch, weight, null, null);
-        pq.offer(n);
+            Character ch = entry.getKey();
+            Integer weight = entry.getValue();
+            node n = new node(ch, weight, null, null);
+            pq.offer(n);
         }		
     }
 
-    private void countWord(){
+    private void countWord() {
         Character ch;
         Integer weight;
         for (int i=0; i<orgStr.length(); i++){
@@ -185,7 +185,7 @@ public class Huffman {
         return (n.left == null) && (n.right == null);
     }
 
-    public String encode(){
+    public String encode() {
         StringBuilder sb = new StringBuilder();
         Character ch;
         for(int i=0; i<orgStr.length(); i++){
@@ -196,7 +196,7 @@ public class Huffman {
         return encodedStr;
     }
 
-    public String decode(){
+    public String decode() {
         StringBuilder sb = new StringBuilder();
         String t = "";
 

@@ -61,7 +61,7 @@ public class JavaHuffmanCoding {
         System.out.println("% reduction = " + (-r)) ;
     }
     
-    public static String readFile(String fname){
+    public static String readFile(String fname) {
         StringBuilder sb = new StringBuilder();
         File filename = new File(fname);
         try (BufferedReader in = new BufferedReader(new FileReader(filename))){
@@ -83,7 +83,7 @@ public class JavaHuffmanCoding {
         }
     }
   
-    public static void testbed(){
+    public static void testbed() {
         boolean show = true ;
         String orgFile = "files/original.txt";
         String dotFile = "files/test.dot";
