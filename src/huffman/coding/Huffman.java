@@ -27,6 +27,7 @@ public class Huffman {
     private int counter;  // Unique id assigned to each node
     private int treeSize;  // # of total nodes in the tree
     private node root;
+    public int finalLength;
 
     // Inner class
     private class node {
@@ -48,6 +49,7 @@ public class Huffman {
     public Huffman(String orgStr, boolean show, String dotfilename) {
         this.counter = 0;
         this.treeSize = 0;
+        this.finalLength = 0;
         this.orgStr = orgStr;
         hmapWC = new HashMap<Character, Integer>();
         hmapCode = new HashMap<Character, String>();
@@ -173,10 +175,11 @@ public class Huffman {
         Integer weight;
         for (int i=0; i<orgStr.length(); i++){
             ch = new Character(orgStr.charAt(i));
-            if (hmapWC.containsKey(ch) == false)
+            if (hmapWC.containsKey(ch) == false) {
                 weight = new Integer(1);
-            else
+            } else {
                 weight = hmapWC.get(ch) + 1;
+            }
             hmapWC.put(ch, weight);
         }
     }
@@ -200,15 +203,48 @@ public class Huffman {
         StringBuilder sb = new StringBuilder();
         String t = "";
 
-        for(int i=0; i<encodedStr.length(); i++){
+        for(int i=0; i<encodedStr.length(); i++) {
             t += encodedStr.charAt(i);
-            if (hmapCodeR.containsKey(t)){
+            if (hmapCodeR.containsKey(t)) {
                     sb.append(hmapCodeR.get(t));
                     t = "";
             }
         }
         decodedStr = sb.toString();
         return decodedStr;
+    }
+
+    public String binaryToString() {
+        String output = "";
+        for (int i=0; i < encodedStr.length(); i+=8){
+            String next = "";
+            try {
+                next = encodedStr.substring(i, i + 8);
+            } catch (Exception e) {
+                int diff = encodedStr.length() - i;
+                finalLength = diff;
+                next = encodedStr.substring(i, i + diff);
+            }
+            int code = Integer.parseInt(next, 2);
+            output += ((char) code);
+        }
+        encodedStr = output;
+        return encodedStr;
+    }
+
+    public String convertToBinary() {
+        StringBuilder sb = new StringBuilder();
+        int count = 1;
+        for (String s: encodedStr.split("")) {
+            if (count == encodedStr.length()) {
+                sb.append(String.format("%" + finalLength + "s", Integer.toBinaryString(s.charAt(0))).replace(' ', '0'));
+            } else {
+                sb.append(String.format("%" + 8 + "s", Integer.toBinaryString(s.charAt(0))).replace(' ', '0'));
+            }
+            count++;
+        }
+        encodedStr = sb.toString();
+        return encodedStr;
     }
 
 }
