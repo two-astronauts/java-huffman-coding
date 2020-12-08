@@ -57,10 +57,11 @@ public class Huffman {
         pq = new PriorityQueue<node>(1, new Comparator<node>() {
             @Override
             public int compare(node n1, node n2) {
-                if (n1.weight < n2.weight)
+                if (n1.weight < n2.weight) {
                     return -1;
-                else if (n1.weight > n2.weight)
+                } else if (n1.weight > n2.weight) {
                     return 1;
+                }
                 return 0;
             }
         });
@@ -78,12 +79,11 @@ public class Huffman {
     }
 
     private void buildCodeRecursion(node n, String code) {
-        if (n != null){
-            if (! isLeaf(n)){  // n = internal node
+        if (n != null) {
+            if (! isLeaf(n)) {  // n = internal node
                 buildCodeRecursion(n.left, code + '0');
                 buildCodeRecursion(n.right, code + '1');
-            }
-            else{  // n = Leaf node
+            } else {  // n = Leaf node
                 hmapCode.put(n.ch, code); // for {character:code}
                 hmapCodeR.put(code, n.ch); // for {code:character}
             }
@@ -91,23 +91,22 @@ public class Huffman {
     }
 
     private void writeDot(String fname) {
-        if (treeSize > 1){
+        if (treeSize > 1) {
             node n = root;
             try (PrintWriter o = new PrintWriter(new BufferedWriter (new FileWriter(fname)))) {
                 o.println("## Command to generate pdf:  dot -Tpdf test.dot -o test.pdf");
                 o.println("digraph g {");
                 dotWriteRecursion(n, o);  // Recursion
                 o.println("}");
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 System.out.println(e);
             }
         }
     }
 
     private void dotWriteRecursion(node n, PrintWriter o) {
-        if (! isLeaf(n)){
-            if (n.left != null){  // has left kid
+        if (! isLeaf(n)) {
+            if (n.left != null) {  // has left kid
                 String t = "";
                 char c = n.left.ch;
                 if (c != '\0' && c != ' ' && c != '"' && c!= '\n')  // regular characters
@@ -121,7 +120,7 @@ public class Huffman {
                 o.println(" \"" + n.uid + "\\n" + n.weight + "\" -> \"" + n.left.uid + "\\n" + n.left.weight + t + "\" [color=red, label=0]");
                 dotWriteRecursion(n.left, o);
             }
-            if (n.right != null){ // has right kid
+            if (n.right != null) { // has right kid
                 String t = "";
                 char c = n.right.ch;	
                 if (c != '\0' && c != ' ' && c != '"' && c != '\n') // regular characters
@@ -141,20 +140,17 @@ public class Huffman {
     private void buildTree() {
         buildMinHeap();  // Set all leaf nodes into MinHeap
         node left, right;
-        while (! pq.isEmpty()){
+        while (! pq.isEmpty()) {
             left = pq.poll(); treeSize++;
-            if (pq.peek() != null){
+            if (pq.peek() != null) {
                 right = pq.poll();  treeSize++;
                 root = new node('\0', left.weight + right.weight, left, right);
-            }
-            else{  // only left child. right=null
+            } else {  // only left child. right=null
                 root = new node('\0', left.weight, left, null);
             }
-
-            if (pq.peek() != null){
+            if (pq.peek() != null) {
                 pq.offer(root);
-            }
-            else{  // = Top root. Finished building the tree.
+            } else {  // = Top root. Finished building the tree.
                 treeSize++;
                 break;
             }
@@ -167,7 +163,7 @@ public class Huffman {
             Integer weight = entry.getValue();
             node n = new node(ch, weight, null, null);
             pq.offer(n);
-        }		
+        }
     }
 
     private void countWord() {
@@ -191,7 +187,7 @@ public class Huffman {
     public String encode() {
         StringBuilder sb = new StringBuilder();
         Character ch;
-        for(int i=0; i<orgStr.length(); i++){
+        for (int i=0; i<orgStr.length(); i++) {
             ch = orgStr.charAt(i);
             sb.append(hmapCode.get(ch));
         }
@@ -203,7 +199,7 @@ public class Huffman {
         StringBuilder sb = new StringBuilder();
         String t = "";
 
-        for(int i=0; i<encodedStr.length(); i++) {
+        for (int i=0; i<encodedStr.length(); i++) {
             t += encodedStr.charAt(i);
             if (hmapCodeR.containsKey(t)) {
                     sb.append(hmapCodeR.get(t));
@@ -216,7 +212,7 @@ public class Huffman {
 
     public String binaryToString() {
         String output = "";
-        for (int i=0; i < encodedStr.length(); i+=8){
+        for (int i=0; i < encodedStr.length(); i+=8) {
             String next = "";
             try {
                 next = encodedStr.substring(i, i + 8);

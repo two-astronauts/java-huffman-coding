@@ -75,7 +75,7 @@ public class JavaHuffmanCoding {
         System.out.println(d);
         System.out.println("==============================================================================");
 
-        double sl = orgStr.length() * 7;
+        double sl = orgStr.length() * 8;
         double el = ascii.length();
         System.out.println("\n================================== Costo ===================================");
         System.out.println("Costo del texto original = " + (int)sl + " bits") ;
